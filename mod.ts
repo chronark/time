@@ -1,2 +1,2 @@
-export * from "./pkg/time.ts"
-export * from "./pkg/duration.ts"
+export * from "./pkg/time.ts";
+export * from "./pkg/duration.ts";

@@ -1,4 +1,4 @@
-import { Duration } from './duration.ts';
+import { Duration } from "./duration.ts";
 
 export class Time {
   /**
@@ -49,8 +49,8 @@ export class Time {
         time.hour ?? 0,
         time.minute ?? 0,
         time.second ?? 0,
-        time.ms ?? 0
-      )
+        time.ms ?? 0,
+      ),
     );
   }
 
@@ -67,8 +67,8 @@ export class Time {
         t.getUTCHours(),
         t.getUTCMinutes(),
         t.getUTCSeconds(),
-        t.getUTCMilliseconds()
-      )
+        t.getUTCMilliseconds(),
+      ),
     );
   }
   after(time: Time): boolean {
@@ -126,7 +126,7 @@ export class Time {
         ((t.getTime() - firstWeek.getTime()) / 86400000 -
           3 +
           ((firstWeek.getDay() + 6) % 7)) /
-          7
+          7,
       )
     );
   }
@@ -155,8 +155,8 @@ export class Time {
         t.getUTCHours(),
         t.getUTCMinutes(),
         t.getUTCSeconds(),
-        t.getUTCMilliseconds()
-      )
+        t.getUTCMilliseconds(),
+      ),
     );
   }
 }
