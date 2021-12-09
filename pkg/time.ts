@@ -6,22 +6,10 @@ export class Time {
    */
   private readonly unixMilli: number;
 
-  private constructor(unixMilli: number) {
-    this.unixMilli = unixMilli;
-  }
-
-  static now(): Time {
-    return Time.unixMilli(Date.now());
-  }
-  static fromISOString(isoString: string): Time {
-    return new Time(new Date(isoString).getTime());
-  }
-  static unix(s: number): Time {
-    return new Time(s * 1000);
-  }
-  static unixMilli(ms: number): Time {
-    return new Time(ms);
-  }
+  /**
+   * Milliseconds since unix epoch
+   */
+  public constructor(unixMilli: number);
   /**
    * Returns a new Time.
    * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
@@ -32,7 +20,7 @@ export class Time {
    * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
    * @param ms A number from 0 to 999 that specifies the milliseconds.
    */
-  static new(time: {
+  public constructor(time: {
     year?: number;
     month?: number;
     day?: number;
@@ -40,26 +28,51 @@ export class Time {
     minute?: number;
     second?: number;
     ms?: number;
-  }): Time {
-    return new Time(
-      Date.UTC(
-        time.year ?? 0,
-        (time.month ?? 1) - 1,
-        time.day ?? 0,
-        time.hour ?? 0,
-        time.minute ?? 0,
-        time.second ?? 0,
-        time.ms ?? 0,
-      ),
-    );
+  });
+  public constructor(
+    arg:
+      | number
+      | {
+        year?: number;
+        month?: number;
+        day?: number;
+        hour?: number;
+        minute?: number;
+        second?: number;
+        ms?: number;
+      },
+  ) {
+    if (typeof arg === "number") {
+      this.unixMilli = arg;
+    } else {
+      this.unixMilli = Date.UTC(
+        arg.year ?? 0,
+        (arg.month ?? 1) - 1,
+        arg.day ?? 0,
+        arg.hour ?? 0,
+        arg.minute ?? 0,
+        arg.second ?? 0,
+        arg.ms ?? 0,
+      );
+    }
   }
 
-  add(duration: Duration): Time {
-    return Time.unixMilli(this.unixMilli + duration.milliseconds);
+  static now(): Time {
+    return new Time(Date.now());
   }
-  addDate(years: number, months: number, days: number): Time {
+  static fromISOString(isoString: string): Time {
+    return new Time(new Date(isoString).getTime());
+  }
+  static unix(s: number): Time {
+    return new Time(s * 1000);
+  }
+
+  public add(duration: Duration): Time {
+    return new Time(this.unixMilli + duration.milliseconds);
+  }
+  public addDate(years: number, months: number, days: number): Time {
     const t = new Date(this.unixMilli);
-    return Time.unixMilli(
+    return new Time(
       Date.UTC(
         t.getUTCFullYear() + years,
         t.getUTCMonth() + months,
@@ -71,51 +84,51 @@ export class Time {
       ),
     );
   }
-  after(time: Time): boolean {
+  public after(time: Time): boolean {
     return this.unixMilli > time.unixMilli;
   }
-  afterOrEqual(time: Time): boolean {
+  public afterOrEqual(time: Time): boolean {
     return this.unixMilli >= time.unixMilli;
   }
-  before(time: Time): boolean {
+  public before(time: Time): boolean {
     return this.unixMilli < time.unixMilli;
   }
-  beforeOrEqual(time: Time): boolean {
+  public beforeOrEqual(time: Time): boolean {
     return this.unixMilli <= time.unixMilli;
   }
 
-  date(): Date {
+  public date(): Date {
     return new Date(this.unixMilli);
   }
 
-  equal(time: Time): boolean {
+  public equal(time: Time): boolean {
     return this.unixMilli === time.unixMilli;
   }
   // format(format: string): string {}
 
-  get unix(): number {
+  public get unix(): number {
     return Math.floor(this.unixMilli / 1000);
   }
 
-  get ms(): number {
+  public get ms(): number {
     return new Date(this.unixMilli).getUTCMilliseconds();
   }
-  get second(): number {
+  public get second(): number {
     return new Date(this.unixMilli).getUTCSeconds();
   }
-  get minute(): number {
+  public get minute(): number {
     return new Date(this.unixMilli).getUTCMinutes();
   }
-  get hour(): number {
+  public get hour(): number {
     return new Date(this.unixMilli).getUTCHours();
   }
-  get day(): number {
+  public get day(): number {
     return new Date(this.unixMilli).getUTCDate();
   }
   /**
    * Returns the calendarweek.
    */
-  get week(): number {
+  public get week(): number {
     const t = new Date(this.unixMilli);
     t.setHours(0, 0, 0, 0);
     t.setDate(t.getDate() + 3 - ((t.getDay() + 6) % 7));
@@ -130,24 +143,24 @@ export class Time {
       )
     );
   }
-  get month(): number {
+  public get month(): number {
     return new Date(this.unixMilli).getUTCMonth() + 1;
   }
-  get year(): number {
+  public get year(): number {
     return new Date(this.unixMilli).getUTCFullYear();
   }
   /**
    * Returns the time formatted as `YYYY-MM-DDTHH:mm:ss.sssZ` (ISO-8601)
    */
-  toString(): string {
+  public toString(): string {
     return new Date(this.unixMilli).toISOString();
   }
-  sub(duration: Duration): Time {
-    return Time.unixMilli(this.unixMilli - duration.milliseconds);
+  public sub(duration: Duration): Time {
+    return new Time(this.unixMilli - duration.milliseconds);
   }
-  subDate(years: number, months: number, days: number): Time {
+  public subDate(years: number, months: number, days: number): Time {
     const t = new Date(this.unixMilli);
-    return Time.unixMilli(
+    return new Time(
       Date.UTC(
         t.getUTCFullYear() - years,
         t.getUTCMonth() - months,
